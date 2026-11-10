@@ -1,0 +1,124 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Icon from '../components/Icon.astro';
+import { school } from '../lib/site';
+
+// Ungefähre Lage von Rastow (Ortsmitte) – exakte Koordinaten der Schule bitte ergänzen.
+const lat = 53.4575;
+const lon = 11.4297;
+const bbox = [lon - 0.012, lat - 0.006, lon + 0.012, lat + 0.006].join(',');
+const mapSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lon}`;
+const mapLink = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=16/${lat}/${lon}`;
+---
+<BaseLayout title="Kontakt" description="Kontakt, Anfahrt und Sekretariatszeiten der Ernst-Alban-Schule Rastow.">
+  <PageHeader eyebrow="Kontakt" title="Wir sind für Sie da." lead="Ob Fragen zur Anmeldung, eine Krankmeldung oder ein Gesprächswunsch – melden Sie sich gern im Sekretariat." motif="mail" />
+
+  <section class="section" style="padding-top:clamp(32px,5vw,56px)">
+    <div class="container contact">
+      <div class="contact__info">
+        <a class="card card--link contact__item" href={`tel:${school.phoneHref}`}>
+          <span class="icon-badge"><Icon name="phone" /></span>
+          <span><small>Telefon</small><strong>{school.phone}</strong></span>
+        </a>
+        <a class="card card--link contact__item" href={`mailto:${school.email}`}>
+          <span class="icon-badge"><Icon name="mail" /></span>
+          <span><small>E-Mail</small><strong>{school.email}</strong></span>
+        </a>
+        <div class="card contact__item">
+          <span class="icon-badge icon-badge--accent"><Icon name="pin" /></span>
+          <span><small>Adresse</small><strong>{school.street}, {school.zip} {school.city}</strong></span>
+        </div>
+        <div class="card">
+          <h2 class="contact__h">Sekretariat</h2>
+          <dl class="hours">
+            {school.officeHours.map((h) => (<><dt>{h.days}</dt><dd>{h.time}</dd></>))}
+          </dl>
+          <p class="contact__note">In den Ferien ist das Sekretariat nur eingeschränkt besetzt.</p>
+        </div>
+      </div>
+
+      <div class="card contact__form-card">
+        <h2 class="contact__h">Nachricht schreiben</h2>
+        <p class="contact__note">Das Formular öffnet Ihr E-Mail-Programm – es werden keine Daten auf dieser Website gespeichert.</p>
+        <form class="form" data-mailto={school.email}>
+          <label>Ihr Name<input name="name" autocomplete="name" required /></label>
+          <label>Anliegen
+            <select name="topic">
+              <option>Allgemeine Frage</option>
+              <option>Anmeldung Klasse 1</option>
+              <option>Anmeldung Klasse 5</option>
+              <option>Termin vereinbaren</option>
+              <option>Förderverein</option>
+            </select>
+          </label>
+          <label>Nachricht<textarea name="message" rows="5" required></textarea></label>
+          <button class="btn" type="submit">E-Mail vorbereiten <Icon name="arrow" /></button>
+        </form>
+      </div>
+    </div>
+
+    <div class="container map reveal">
+      <div class="map__frame" data-map data-src={mapSrc}>
+        <div class="map__consent">
+          <Icon name="pin" size={40} />
+          <p><strong>Karte anzeigen?</strong><br />Beim Laden der Karte werden Daten an OpenStreetMap übertragen.</p>
+          <div class="map__actions">
+            <button class="btn" type="button" data-map-load>Karte laden</button>
+            <a class="btn btn--ghost" href={mapLink} rel="noopener">In OpenStreetMap öffnen <Icon name="external" /></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('form[data-mailto]');
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const d = new FormData(form);
+    const subject = encodeURIComponent(`${d.get('topic')} – ${d.get('name')}`);
+    const body = encodeURIComponent(`${d.get('message')}\n\n${d.get('name')}`);
+    window.location.href = `mailto:${form.dataset.mailto}?subject=${subject}&body=${body}`;
+  });
+
+  document.querySelector('[data-map-load]')?.addEventListener('click', () => {
+    const frame = document.querySelector<HTMLElement>('[data-map]');
+    if (!frame) return;
+    const iframe = document.createElement('iframe');
+    iframe.src = frame.dataset.src!;
+    iframe.title = 'Karte: Lage der Schule in Rastow';
+    iframe.loading = 'lazy';
+    frame.replaceChildren(iframe);
+  });
+</script>
+
+<style>
+  .contact { display: grid; gap: clamp(16px, 2.4vw, 28px); }
+  @media (min-width: 960px) { .contact { grid-template-columns: 1fr 1.1fr; align-items: start; } }
+  .contact__info { display: grid; gap: 14px; }
+  .contact__item { display: flex; align-items: center; gap: 1rem; text-decoration: none; color: var(--c-text); padding: 18px 20px; }
+  .contact__item small { display: block; color: var(--c-muted); font-size: 0.85rem; }
+  .contact__item strong { font-size: 1.08rem; word-break: break-word; }
+  .contact__h { font-size: 1.5rem; }
+  .contact__note { color: var(--c-muted); font-size: 0.93rem; }
+  .hours { display: grid; grid-template-columns: auto 1fr; gap: 0.4rem 1.5rem; margin: 0 0 1rem; }
+  .hours dt { font-weight: 700; }
+  .hours dd { margin: 0; }
+  .form { display: grid; gap: 1rem; }
+  .form label { display: grid; gap: 0.35rem; font-weight: 700; font-size: 0.95rem; }
+  .form input, .form select, .form textarea {
+    font: inherit; font-weight: 400; color: var(--c-text); background: var(--c-bg);
+    border: 1.5px solid var(--c-border); border-radius: var(--radius-sm); padding: 0.7rem 0.9rem; min-height: 48px;
+  }
+  .form input:focus, .form select:focus, .form textarea:focus { border-color: var(--c-primary); outline: none; box-shadow: 0 0 0 4px var(--c-primary-soft); }
+  .form .btn { justify-self: start; }
+  .map { margin-top: clamp(24px, 4vw, 48px); }
+  .map__frame { border-radius: var(--radius-lg); overflow: hidden; height: 420px; background: var(--c-surface-2); border: 1px solid var(--c-border); }
+  .map__frame :global(iframe) { width: 100%; height: 100%; border: 0; }
+  .map__consent { height: 100%; display: grid; place-content: center; justify-items: center; text-align: center; gap: 0.5rem; padding: 24px; color: var(--c-muted); }
+  .map__consent :global(svg) { color: var(--c-primary); }
+  .map__consent strong { color: var(--c-text); }
+  .map__actions { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; }
+</style>

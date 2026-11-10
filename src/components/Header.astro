@@ -1,0 +1,146 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { nav, url, school } from '../lib/site';
+const current = Astro.url.pathname;
+const isActive = (href: string) => current.startsWith(url(href));
+---
+<div class="topbar">
+  <div class="container topbar__inner">
+    <p class="topbar__note"><span class="dot" aria-hidden="true"></span> Designentwurf – Inhalte teilweise Platzhalter</p>
+    <ul class="topbar__links">
+      <li><a href={`tel:${school.phoneHref}`}><Icon name="phone" size={16} /> {school.phone}</a></li>
+      <li><a href={`mailto:${school.email}`}><Icon name="mail" size={16} /> E-Mail</a></li>
+      <li><a href={school.itslearning} rel="noopener"><Icon name="laptop" size={16} /> itslearning</a></li>
+    </ul>
+  </div>
+</div>
+
+<header class="header" data-header>
+  <div class="container header__inner">
+    <a href={url()} class="header__brand" aria-label="Startseite – Ernst-Alban-Schule Rastow">
+      <Logo />
+    </a>
+
+    <nav class="nav" aria-label="Hauptnavigation">
+      <ul class="nav__list" id="nav-list">
+        {nav.map((item) => (
+          <li>
+            <a href={url(item.href)} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="header__actions">
+      <button class="icon-btn" type="button" data-theme-toggle aria-label="Farbschema wechseln">
+        <Icon name="moon" class="i-moon" size={20} />
+        <Icon name="sun" class="i-sun" size={20} />
+      </button>
+      <button class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="nav-list" data-nav-toggle>
+        <Icon name="menu" class="i-menu" size={22} />
+        <Icon name="close" class="i-close" size={22} />
+        <span class="visually-hidden">Menü</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    if (!open && header) header.style.setProperty('--header-offset', `${header.getBoundingClientRect().bottom}px`);
+    toggle.setAttribute('aria-expanded', String(!open));
+    header?.classList.toggle('is-open', !open);
+    document.body.style.overflow = open ? '' : 'hidden';
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && header?.classList.contains('is-open')) toggle?.click();
+  });
+
+  const themeBtn = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+  themeBtn?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const isDark = root.dataset.theme
+      ? root.dataset.theme === 'dark'
+      : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = isDark ? 'light' : 'dark';
+    try { localStorage.setItem('theme', root.dataset.theme); } catch {}
+  });
+
+  const onScroll = () => header?.classList.toggle('is-scrolled', window.scrollY > 8);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+</script>
+
+<style>
+  .topbar { background: var(--c-primary-strong); color: #e8f3f3; font-size: 0.85rem; }
+  :global(:root[data-theme='dark']) .topbar { background: #081317; }
+  @media (prefers-color-scheme: dark) { :global(:root:not([data-theme='light'])) .topbar { background: #081317; } }
+  .topbar__inner { display: flex; justify-content: space-between; align-items: center; gap: 1rem; min-height: 38px; }
+  .topbar__note { margin: 0; display: flex; align-items: center; gap: 0.5rem; opacity: 0.9; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c-accent); box-shadow: 0 0 0 3px rgb(242 169 59 / 0.3); }
+  .topbar__links { display: flex; gap: 1.25rem; list-style: none; margin: 0; padding: 0; }
+  .topbar__links a { color: inherit; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; }
+  .topbar__links a:hover { text-decoration: underline; }
+  @media (max-width: 760px) { .topbar__links { display: none; } }
+
+  .header {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in srgb, var(--c-bg) 85%, transparent);
+    backdrop-filter: saturate(1.4) blur(14px);
+    -webkit-backdrop-filter: saturate(1.4) blur(14px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .header.is-scrolled { border-color: var(--c-border); box-shadow: var(--shadow-sm); }
+  .header__inner { display: flex; align-items: center; gap: 1rem; min-height: 76px; }
+  .header__brand { text-decoration: none; margin-right: auto; }
+
+  .nav__list { display: flex; gap: 0.15rem; list-style: none; margin: 0; padding: 0; }
+  .nav__list a {
+    display: block; padding: 0.5rem 0.62rem; border-radius: 999px; white-space: nowrap;
+    color: var(--c-text); text-decoration: none; font-weight: 700; font-size: 0.95rem;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .nav__list a:hover { background: var(--c-primary-soft); color: var(--c-primary-strong); }
+  .nav__list a[aria-current='page'] { background: var(--c-primary); color: var(--c-on-primary); }
+
+  .header__actions { display: flex; gap: 0.4rem; }
+  .icon-btn {
+    display: grid; place-items: center; width: 44px; height: 44px;
+    border-radius: 50%; border: 1px solid var(--c-border); background: var(--c-surface);
+    color: var(--c-text); cursor: pointer;
+  }
+  .icon-btn:hover { border-color: var(--c-primary); color: var(--c-primary); }
+  .icon-btn :global(svg) { grid-area: 1 / 1; }
+  .icon-btn :global(.i-sun), .icon-btn :global(.i-close) { display: none; }
+  :global(:root[data-theme='dark']) .icon-btn :global(.i-sun) { display: block; }
+  :global(:root[data-theme='dark']) .icon-btn :global(.i-moon) { display: none; }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .icon-btn :global(.i-sun) { display: block; }
+    :global(:root:not([data-theme='light'])) .icon-btn :global(.i-moon) { display: none; }
+  }
+  .nav-toggle { display: none; }
+  .is-open .nav-toggle :global(.i-menu) { display: none; }
+  .is-open .nav-toggle :global(.i-close) { display: block; }
+
+  @media (max-width: 1279px) {
+    .nav-toggle { display: grid; }
+    .nav {
+      position: fixed; inset: 0; top: var(--header-offset, 76px);
+      background: var(--c-bg);
+      padding: 1.5rem var(--gutter) 3rem;
+      overflow-y: auto;
+      opacity: 0; visibility: hidden; transform: translateY(-8px);
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    }
+    .is-open .nav { opacity: 1; visibility: visible; transform: none; }
+    .nav__list { flex-direction: column; gap: 0.3rem; }
+    .nav__list a { font-family: var(--font-display); font-size: 1.5rem; padding: 0.75rem 1rem; border-radius: var(--radius-sm); }
+  }
+  /* backdrop-filter würde das fixierte Menü-Panel auf den Header begrenzen */
+  .header.is-open { backdrop-filter: none; -webkit-backdrop-filter: none; background: var(--c-bg); }
+</style>

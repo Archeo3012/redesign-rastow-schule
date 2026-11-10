@@ -1,0 +1,18 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import NewsCard from '../../components/NewsCard.astro';
+const posts = (await getCollection('news')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<BaseLayout title="Neuigkeiten" description="Aktuelle Berichte aus dem Schulleben der Ernst-Alban-Schule Rastow.">
+  <PageHeader eyebrow="Neuigkeiten" title="Was gibt’s Neues?" lead="Berichte, Erfolge und Einblicke aus dem Schulalltag – von der Grundschule bis zur Klasse 10." motif="star" />
+  <section class="section" style="padding-top:clamp(32px,5vw,56px)">
+    <div class="container grid grid--3 news-list">
+      {posts.map((post, i) => <NewsCard post={post} featured={i === 0} />)}
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  @media (min-width: 900px) { .news-list { grid-template-columns: repeat(3, 1fr); } }
+</style>

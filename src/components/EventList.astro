@@ -1,0 +1,57 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Icon from './Icon.astro';
+import { dateParts, formatDate } from '../lib/site';
+interface Props { events: CollectionEntry<'termine'>[]; compact?: boolean }
+const { events, compact = false } = Astro.props;
+---
+<ol class:list={['events', { 'events--compact': compact }]}>
+  {events.map((e) => {
+    const p = dateParts(e.data.date);
+    return (
+      <li class="event">
+        <div class:list={['event__date', { 'event__date--holiday': e.data.category === 'Ferien' }]}>
+          <span class="event__day">{p.day}</span>
+          <span class="event__month">{p.month}</span>
+        </div>
+        <div class="event__info">
+          <h3>{e.data.title}</h3>
+          <p class="event__meta">
+            <span><Icon name="calendar" size={16} />
+              {e.data.end ? `${formatDate(e.data.date)} – ${formatDate(e.data.end)}` : `${p.weekday}, ${formatDate(e.data.date)}`}
+            </span>
+            {e.data.time && <span><Icon name="clock" size={16} />{e.data.time}</span>}
+            {!compact && e.data.location && <span><Icon name="pin" size={16} />{e.data.location}</span>}
+          </p>
+          {!compact && e.body && <p class="event__desc">{e.body.trim()}</p>}
+        </div>
+        {!compact && <span class="tag event__tag">{e.data.category}</span>}
+      </li>
+    );
+  })}
+</ol>
+
+<style>
+  .events { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .event {
+    display: grid; grid-template-columns: auto 1fr auto; gap: 1.1rem; align-items: center;
+    background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius);
+    padding: 14px 18px 14px 14px;
+  }
+  .event__date {
+    display: grid; place-items: center; width: 68px; height: 68px; border-radius: 16px;
+    background: var(--c-primary); color: var(--c-on-primary); line-height: 1;
+  }
+  .event__date--holiday { background: var(--c-accent); color: var(--c-on-accent); }
+  .event__day { font-family: var(--font-display); font-size: 1.7rem; font-weight: 650; }
+  .event__month { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-top: -10px; }
+  .event h3 { font-size: 1.12rem; margin: 0 0 0.3rem; }
+  .event__meta { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; margin: 0; color: var(--c-muted); font-size: 0.92rem; }
+  .event__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .event__desc { margin: 0.5rem 0 0; font-size: 0.95rem; }
+  @media (max-width: 600px) {
+    .event { grid-template-columns: auto 1fr; }
+    .event__tag { display: none; }
+  }
+  .events--compact .event { grid-template-columns: auto 1fr; }
+</style>

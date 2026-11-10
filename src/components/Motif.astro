@@ -1,0 +1,41 @@
+---
+/**
+ * Illustrierte Bildkachel als Platzhalter für Fotos.
+ * Weiche Farbfläche + großes Linien-Icon + dekorative Formen.
+ */
+import Icon from './Icon.astro';
+type Name = 'books' | 'gear' | 'sun' | 'ball' | 'leaf' | 'star' | 'music' | 'paint' | 'compass' | 'users' | 'graduation' | 'calendar' | 'mail' | 'download';
+interface Props { name: Name; size?: 'sm' | 'md' | 'lg'; class?: string }
+const { name, size = 'md', class: cls } = Astro.props;
+const tone: Record<Name, string> = {
+  books: 'primary', gear: 'primary', sun: 'accent', ball: 'coral', leaf: 'leaf', star: 'accent', music: 'coral', paint: 'leaf', compass: 'primary', users: 'coral', graduation: 'primary', calendar: 'accent', mail: 'primary', download: 'leaf',
+};
+---
+<div class:list={['motif', `motif--${size}`, `motif--${tone[name]}`, cls]}>
+  <span class="motif__blob motif__blob--a"></span>
+  <span class="motif__blob motif__blob--b"></span>
+  <Icon name={name} class="motif__icon" />
+</div>
+
+<style>
+  .motif {
+    --tone: var(--c-primary);
+    position: relative; isolation: isolate; overflow: hidden;
+    display: grid; place-items: center;
+    aspect-ratio: 4 / 3; width: 100%;
+    border-radius: var(--radius);
+    background: color-mix(in srgb, var(--tone) 14%, var(--c-surface));
+    color: var(--tone);
+  }
+  .motif--accent { --tone: var(--c-accent); }
+  .motif--coral { --tone: var(--c-coral); }
+  .motif--leaf { --tone: var(--c-leaf); }
+  .motif--lg { aspect-ratio: 1; width: 260px; flex: none; border-radius: 40% 60% 55% 45% / 50% 45% 55% 50%; }
+  .motif--sm { aspect-ratio: 1; width: 64px; flex: none; border-radius: 18px; }
+  .motif :global(.motif__icon) { width: 34%; height: auto; stroke-width: 1.4; position: relative; z-index: 2; }
+  .motif__blob { position: absolute; border-radius: 50%; z-index: 1; }
+  .motif__blob--a { width: 55%; aspect-ratio: 1; right: -12%; top: -18%; background: color-mix(in srgb, var(--tone) 22%, transparent); }
+  .motif__blob--b { width: 30%; aspect-ratio: 1; left: 8%; bottom: -10%; border: 3px dashed color-mix(in srgb, var(--tone) 45%, transparent); }
+  .motif--sm .motif__blob { display: none; }
+  .motif--sm :global(.motif__icon) { width: 50%; stroke-width: 1.8; }
+</style>

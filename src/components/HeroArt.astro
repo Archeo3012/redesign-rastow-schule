@@ -1,0 +1,92 @@
+---
+/** Illustration für den Startseiten-Hero: Schulhaus, Sonne, Zahnrad, Bäume. */
+---
+<svg class="hero-art" viewBox="0 0 520 460" role="img" aria-labelledby="hero-art-title">
+  <title id="hero-art-title">Illustration: Schulgebäude mit Sonne, Bäumen und einem Zahnrad</title>
+  <defs>
+    <clipPath id="blob">
+      <path d="M262 18c92-6 186 40 224 126 38 85 10 190-56 252-66 61-170 78-262 48C76 414 12 340 6 254 0 168 46 82 116 46c44-22 96-26 146-28z"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#blob)">
+    <rect width="520" height="460" fill="var(--c-primary-soft)"/>
+    <!-- Wolken -->
+    <g fill="var(--c-surface)" opacity="0.9" class="hero-art__clouds">
+      <path d="M70 120a22 22 0 0 1 40-12 18 18 0 0 1 28 16h-76a12 12 0 0 1 8-4z"/>
+      <path d="M300 78a18 18 0 0 1 33-10 15 15 0 0 1 23 13h-62a10 10 0 0 1 6-3z"/>
+    </g>
+    <!-- Hügel -->
+    <path d="M0 360c90-40 180-48 270-30s170 20 250-8v138H0z" fill="color-mix(in srgb, var(--c-leaf) 35%, var(--c-primary-soft))"/>
+    <path d="M0 392c110-26 220-22 320-6s150 10 200 0v74H0z" fill="color-mix(in srgb, var(--c-leaf) 55%, var(--c-primary-soft))"/>
+  </g>
+
+  <!-- Sonne -->
+  <g class="hero-art__sun">
+    <circle cx="420" cy="104" r="40" fill="var(--c-accent)"/>
+    <g stroke="var(--c-accent)" stroke-width="6" stroke-linecap="round">
+      <path d="M420 40v-14M420 182v-14M356 104h-14M498 104h-14M375 59l-10-10M475 159l-10-10M375 149l-10 10M475 49l-10 10"/>
+    </g>
+  </g>
+
+  <!-- Schulhaus -->
+  <g>
+    <rect x="150" y="214" width="250" height="150" rx="6" fill="var(--c-surface)"/>
+    <path d="M136 222l139-86 139 86z" fill="var(--c-primary)"/>
+    <!-- Zahnrad im Giebel -->
+    <g class="hero-art__gear" style="transform-origin:275px 188px">
+      <circle cx="275" cy="188" r="20" fill="var(--c-accent)"/>
+      <g fill="var(--c-accent)">
+        <rect x="270" y="160" width="10" height="12" rx="2"/>
+        <rect x="270" y="204" width="10" height="12" rx="2"/>
+        <rect x="247" y="183" width="12" height="10" rx="2"/>
+        <rect x="291" y="183" width="12" height="10" rx="2"/>
+        <rect x="253" y="166" width="10" height="12" rx="2" transform="rotate(-45 258 172)"/>
+        <rect x="287" y="198" width="10" height="12" rx="2" transform="rotate(-45 292 204)"/>
+        <rect x="287" y="166" width="10" height="12" rx="2" transform="rotate(45 292 172)"/>
+        <rect x="253" y="198" width="10" height="12" rx="2" transform="rotate(45 258 204)"/>
+      </g>
+      <circle cx="275" cy="188" r="8" fill="var(--c-primary)"/>
+    </g>
+    <!-- Fenster -->
+    <g fill="var(--c-primary-soft)" stroke="var(--c-primary)" stroke-width="3">
+      <rect x="172" y="238" width="44" height="40" rx="6"/>
+      <rect x="334" y="238" width="44" height="40" rx="6"/>
+      <rect x="172" y="300" width="44" height="40" rx="6"/>
+      <rect x="334" y="300" width="44" height="40" rx="6"/>
+    </g>
+    <g stroke="var(--c-primary)" stroke-width="2.5">
+      <path d="M194 238v40M172 258h44M356 238v40M334 258h44M194 300v40M172 320h44M356 300v40M334 320h44"/>
+    </g>
+    <!-- Tür -->
+    <path d="M248 364v-70a27 27 0 0 1 54 0v70z" fill="var(--c-coral)"/>
+    <circle cx="290" cy="330" r="3.5" fill="var(--c-surface)"/>
+    <rect x="236" y="246" width="78" height="22" rx="11" fill="var(--c-primary)"/>
+    <text x="275" y="261.5" text-anchor="middle" font-family="var(--font-body)" font-size="11" font-weight="700" fill="var(--c-on-primary)" letter-spacing="1.5">SCHULE</text>
+  </g>
+
+  <!-- Bäume -->
+  <g>
+    <rect x="86" y="300" width="10" height="64" rx="4" fill="#7a5a3a"/>
+    <circle cx="91" cy="286" r="38" fill="var(--c-leaf)"/>
+    <circle cx="72" cy="300" r="22" fill="color-mix(in srgb, var(--c-leaf) 80%, black)"/>
+    <rect x="446" y="316" width="8" height="48" rx="4" fill="#7a5a3a"/>
+    <circle cx="450" cy="304" r="28" fill="color-mix(in srgb, var(--c-leaf) 85%, white)"/>
+  </g>
+
+  <!-- Bücherstapel -->
+  <g transform="translate(16 366)">
+    <rect x="0" y="40" width="74" height="16" rx="4" fill="var(--c-primary)"/>
+    <rect x="8" y="24" width="64" height="16" rx="4" fill="var(--c-accent)"/>
+    <rect x="2" y="8" width="58" height="16" rx="4" fill="var(--c-coral)"/>
+  </g>
+</svg>
+
+<style>
+  .hero-art { width: 100%; height: auto; overflow: visible; }
+  .hero-art__gear { animation: spin 18s linear infinite; transform-box: view-box; }
+  .hero-art__sun { animation: float 6s ease-in-out infinite; }
+  .hero-art__clouds { animation: drift 14s ease-in-out infinite alternate; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes float { 50% { transform: translateY(-8px); } }
+  @keyframes drift { to { transform: translateX(18px); } }
+</style>

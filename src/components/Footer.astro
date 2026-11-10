@@ -1,0 +1,80 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { nav, school, url } from '../lib/site';
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <svg class="footer__wave" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 60V30c120-20 240-30 360-20s240 30 360 30 240-25 360-30 240 5 360 20v30z" fill="currentColor"/>
+  </svg>
+  <div class="footer__body">
+    <div class="container footer__grid">
+      <div class="footer__brand">
+        <a href={url()} aria-label="Startseite"><Logo /></a>
+        <p>{school.claim}</p>
+        <p class="footer__carrier">Schulträger: {school.carrier}</p>
+      </div>
+      <div>
+        <h2 class="footer__title">Kontakt</h2>
+        <address>
+          <p>{school.street}<br />{school.zip} {school.city}</p>
+          <p>
+            <a href={`tel:${school.phoneHref}`}><Icon name="phone" size={16} /> {school.phone}</a><br />
+            <a href={`mailto:${school.email}`}><Icon name="mail" size={16} /> {school.email}</a>
+          </p>
+        </address>
+      </div>
+      <div>
+        <h2 class="footer__title">Sekretariat</h2>
+        <dl class="footer__hours">
+          {school.officeHours.map((h) => (<><dt>{h.days}</dt><dd>{h.time}</dd></>))}
+        </dl>
+      </div>
+      <nav aria-label="Fußzeilen-Navigation">
+        <h2 class="footer__title">Entdecken</h2>
+        <ul class="footer__links">
+          {nav.map((n) => <li><a href={url(n.href)}>{n.label}</a></li>)}
+        </ul>
+      </nav>
+    </div>
+    <div class="container footer__bottom">
+      <p>© {year} {school.shortName} Rastow</p>
+      <ul>
+        <li><a href={url('impressum/')}>Impressum</a></li>
+        <li><a href={url('datenschutz/')}>Datenschutz</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer { --footer-bg: #093f48; margin-top: var(--section); }
+  :global(:root[data-theme='dark']) .footer { --footer-bg: #081317; }
+  @media (prefers-color-scheme: dark) { :global(:root:not([data-theme='light'])) .footer { --footer-bg: #081317; } }
+  .footer__wave { width: 100%; height: 50px; margin-bottom: -1px; color: var(--footer-bg); }
+  .footer__body { background: var(--footer-bg); padding: 3rem 0 1.5rem; }
+  .footer__body, .footer__body * { color: #d7e8e8; }
+  .footer__grid { display: grid; gap: 2.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); }
+  .footer__brand :global(.logo__name) { color: #fff; }
+  .footer__brand :global(.logo__sub) { color: #a9c8c9; }
+  .footer__brand :global(.logo__mark g) { fill: var(--c-accent); }
+  .footer__brand :global(.logo__mark path:last-child) { fill: #fff; }
+  .footer__brand :global(.logo__mark circle:first-of-type) { fill: #0d4a54; }
+  .footer__brand a { text-decoration: none; display: inline-block; margin-bottom: 1rem; }
+  .footer__carrier { font-size: 0.9rem; opacity: 0.75; }
+  .footer__title { font-family: var(--font-body); font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; color: #fff !important; margin-bottom: 1rem; }
+  address { font-style: normal; }
+  .footer a { text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; }
+  .footer a:hover { text-decoration: underline; color: #fff; }
+  .footer__hours { display: grid; gap: 0.15rem 1rem; margin: 0; }
+  .footer__hours dt { font-weight: 700; color: #fff; }
+  .footer__hours dd { margin: 0 0 0.6rem; }
+  .footer__links { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.35rem; }
+  .footer__bottom {
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+    border-top: 1px solid rgb(255 255 255 / 0.15); margin-top: 3rem; padding-top: 1.5rem; font-size: 0.9rem;
+  }
+  .footer__bottom p { margin: 0; }
+  .footer__bottom ul { display: flex; gap: 1.25rem; list-style: none; padding: 0; margin: 0; }
+</style>

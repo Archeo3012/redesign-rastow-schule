@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { url } from '../lib/site';
+---
+<BaseLayout title="Seite nicht gefunden">
+  <section class="section nf">
+    <div class="container">
+      <p class="nf__code">404</p>
+      <h1>Hier ist wohl jemand falsch abgebogen.</h1>
+      <p class="lead" style="margin-inline:auto">Die gesuchte Seite gibt es nicht (mehr). Vielleicht hilft der Weg zurück zur Startseite?</p>
+      <a class="btn" href={url()}>Zur Startseite <Icon name="arrow" /></a>
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .nf { text-align: center; }
+  .nf__code { font-family: var(--font-display); font-size: clamp(6rem, 18vw, 11rem); line-height: 1; margin: 0; color: var(--c-accent); font-weight: 700; }
+</style>

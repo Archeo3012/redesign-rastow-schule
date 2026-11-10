@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Feature from '../components/Feature.astro';
+import Icon from '../components/Icon.astro';
+import { url } from '../lib/site';
+
+const steps = [
+  { grade: '5–6', title: 'Orientierungsstufe', text: 'Gemeinsames Lernen, Stärken entdecken, Lernmethoden aufbauen.' },
+  { grade: '7', title: 'Berufe kennenlernen', text: 'Erste Einblicke in Berufsfelder, Potenzialanalyse, Werkstatttage.' },
+  { grade: '8–9', title: 'Praxis erleben', text: 'Praxistage und Betriebspraktika in Unternehmen der Region.' },
+  { grade: '9', title: 'Berufsreife', text: 'Abschluss nach Klasse 9 mit Prüfungen in Deutsch, Mathematik und Englisch.' },
+  { grade: '10', title: 'Mittlere Reife', text: 'Mittlerer Schulabschluss – Tür zu Ausbildung oder weiterführender Schule.' },
+];
+---
+<BaseLayout title="Regionale Schule" description="Die Regionale Schule der Ernst-Alban-Schule Rastow: Klassen 5–10, Abschlüsse und Berufsorientierung.">
+  <PageHeader eyebrow="Klassen 5–10" title="Regionale Schule: stark für Ausbildung und Beruf." lead="Wir bereiten Jugendliche gezielt auf ihren Abschluss und den Start ins Berufsleben vor – mit viel Praxis, engen Kontakten zu Betrieben und persönlicher Begleitung." motif="graduation" />
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><div><p class="eyebrow">Dein Weg</p><h2>Von Klasse 5 bis zum Abschluss</h2></div></div>
+      <ol class="path">
+        {steps.map((s, i) => (
+          <li class="path__step reveal" style={`--i:${i}`}>
+            <span class="path__grade">Kl. {s.grade}</span>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container">
+      <div class="section-head"><div><p class="eyebrow">Unser Profil</p><h2>Was dich hier erwartet</h2></div></div>
+      <div class="grid grid--3">
+        <Feature icon="compass" title="Berufsorientierung">Berufsberatung, Bewerbungstraining und Kontakte zu Ausbildungsbetrieben in Rastow, Ludwigslust und Schwerin.</Feature>
+        <Feature icon="gear" title="MINT & Technik" tone="accent">Robotik-AG, Werkstattunterricht und Wettbewerbe – ganz im Geist unseres Namensgebers.</Feature>
+        <Feature icon="laptop" title="Digitales Lernen">Arbeiten mit der Lernplattform itslearning, Tablets und Medienbildung im Unterricht.</Feature>
+        <Feature icon="users" title="Schulsozialarbeit" tone="accent">Ein offenes Ohr bei Sorgen, Streit oder Fragen – vertraulich und unkompliziert.</Feature>
+        <Feature icon="star" title="Förderung">Förderunterricht, Prüfungsvorbereitung und Unterstützung bei Lernschwierigkeiten.</Feature>
+        <Feature icon="ball" title="Fahrten & Projekte" tone="accent">Klassenfahrten, Projektwochen und Exkursionen stärken die Gemeinschaft.</Feature>
+      </div>
+    </div>
+  </section>
+
+  <section class="container cta-mini reveal">
+    <div>
+      <h2>Wechsel nach Klasse 5?</h2>
+      <p>Auch Kinder von anderen Grundschulen sind herzlich willkommen. Kommen Sie zum Infoabend oder vereinbaren Sie einen Termin.</p>
+    </div>
+    <a class="btn btn--accent" href={url('termine/')}>Termine ansehen <Icon name="arrow" /></a>
+  </section>
+</BaseLayout>
+
+<style>
+  .path { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); counter-reset: step; }
+  .path__step {
+    position: relative; background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius);
+    padding: 24px 22px; border-top: 5px solid color-mix(in srgb, var(--c-primary) calc(40% + var(--i) * 15%), var(--c-accent));
+  }
+  .path__grade { display: inline-block; font-weight: 700; font-size: 0.85rem; color: var(--c-primary); background: var(--c-primary-soft); padding: 0.15rem 0.6rem; border-radius: 999px; margin-bottom: 0.9rem; }
+  .path__step h3 { font-size: 1.2rem; }
+  .path__step p { margin: 0; color: var(--c-muted); font-size: 0.97rem; }
+  .cta-mini {
+    margin-top: var(--section); display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: space-between; align-items: center;
+    background: var(--c-accent-soft); border-radius: var(--radius-lg); padding: clamp(24px, 4vw, 44px);
+  }
+  .cta-mini h2 { margin-bottom: 0.3rem; }
+  .cta-mini p { margin: 0; max-width: 60ch; }
+</style>

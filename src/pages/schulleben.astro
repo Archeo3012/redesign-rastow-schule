@@ -1,0 +1,77 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Motif from '../components/Motif.astro';
+import Icon from '../components/Icon.astro';
+
+const ags = (await getCollection('ags')).sort((a, b) => a.data.order - b.data.order);
+const highlights = [
+  { motif: 'leaf', title: 'Herbstfest', text: 'Das große Fest für die ganze Schulfamilie.' },
+  { motif: 'music', title: 'Weihnachtskonzert', text: 'Chor und Bläser stimmen auf die Feiertage ein.' },
+  { motif: 'ball', title: 'Sportfest', text: 'Wettkämpfe, Staffeln und neue Schulrekorde.' },
+  { motif: 'compass', title: 'Klassenfahrten', text: 'Gemeinsam unterwegs – an die Ostsee, nach Berlin und in den Harz.' },
+  { motif: 'star', title: 'Projektwoche', text: 'Eine Woche lang Lernen ganz anders – klassenübergreifend.' },
+  { motif: 'books', title: 'Lesewoche', text: 'Lesenacht, Bücherbasar und Vorlesestunden.' },
+] as const;
+---
+<BaseLayout title="Schulleben" description="AGs, Projekte, Feste und Fahrten an der Ernst-Alban-Schule Rastow.">
+  <PageHeader eyebrow="Schulleben" title="Mehr als Unterricht." lead="Arbeitsgemeinschaften, Feste, Fahrten und Projekte machen unsere Schule zu einem Ort, an dem man gern Zeit verbringt." motif="music" />
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div><p class="eyebrow">Am Nachmittag</p><h2>Unsere AGs</h2></div>
+        <p class="lead" style="max-width:44ch">Die Anmeldung erfolgt zu Beginn jedes Halbjahres über die Klassenleitung.</p>
+      </div>
+      <div class="grid grid--3">
+        {ags.map((ag) => (
+          <article class="card ag reveal">
+            <Motif name={ag.data.motif} size="sm" />
+            <div>
+              <h3>{ag.data.title}</h3>
+              <p class="ag__meta"><span class="tag">{ag.data.grades}</span> <span><Icon name="clock" size={15} /> {ag.data.day}</span></p>
+              <p class="ag__text">{ag.body?.trim()}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container">
+      <div class="section-head"><div><p class="eyebrow">Durchs Schuljahr</p><h2>Feste, Fahrten &amp; Projekte</h2></div></div>
+      <div class="gallery">
+        {highlights.map((h, i) => (
+          <figure class:list={['gallery__item reveal', { 'gallery__item--wide': i === 0 || i === 4 }]}>
+            <Motif name={h.motif} />
+            <figcaption><strong>{h.title}</strong><span>{h.text}</span></figcaption>
+          </figure>
+        ))}
+      </div>
+      <p style="margin-top:1.5rem;color:var(--c-muted);font-size:.95rem">Platzhalter-Illustrationen – hier werden später Fotos aus dem Schulleben gezeigt (mit Einverständnis der Abgebildeten).</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .ag { display: flex; gap: 1.1rem; align-items: flex-start; }
+  .ag h3 { margin-bottom: 0.4rem; }
+  .ag__meta { display: flex; flex-wrap: wrap; gap: 0.4rem 0.8rem; align-items: center; font-size: 0.88rem; color: var(--c-muted); margin-bottom: 0.6rem; }
+  .ag__meta span:last-child { display: inline-flex; align-items: center; gap: 0.3rem; }
+  .ag__text { margin: 0; color: var(--c-muted); font-size: 0.97rem; }
+  .gallery { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); }
+  @media (min-width: 900px) {
+    .gallery { grid-template-columns: repeat(4, 1fr); }
+    .gallery__item--wide { grid-column: span 2; }
+  }
+  .gallery__item { margin: 0; position: relative; }
+  .gallery__item :global(.motif) { aspect-ratio: auto; height: 240px; }
+  .gallery figcaption {
+    position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 3;
+    background: var(--c-surface); border-radius: var(--radius-sm); padding: 10px 14px; box-shadow: var(--shadow-sm);
+    display: grid; font-size: 0.92rem;
+  }
+  .gallery figcaption span { color: var(--c-muted); }
+</style>

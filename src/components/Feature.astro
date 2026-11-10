@@ -1,0 +1,15 @@
+---
+import type { ComponentProps } from 'astro/types';
+import Icon from './Icon.astro';
+interface Props { icon: ComponentProps<typeof Icon>['name']; title: string; tone?: 'primary' | 'accent' }
+const { icon, title, tone = 'primary' } = Astro.props;
+---
+<div class="card feature reveal">
+  <span class:list={['icon-badge', { 'icon-badge--accent': tone === 'accent' }]}><Icon name={icon} /></span>
+  <h3>{title}</h3>
+  <p><slot /></p>
+</div>
+<style>
+  .feature h3 { margin: 1.2rem 0 0.4rem; }
+  .feature p { margin: 0; color: var(--c-muted); }
+</style>

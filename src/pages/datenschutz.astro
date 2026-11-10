@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { school } from '../lib/site';
+---
+<BaseLayout title="Datenschutz">
+  <section class="section">
+    <div class="container prose">
+      <p class="eyebrow">Rechtliches</p>
+      <h1>Datenschutzerklärung</h1>
+      <p><strong>Hinweis:</strong> Platzhalter – die Datenschutzerklärung muss mit der bzw. dem Datenschutzbeauftragten der Schule abgestimmt werden.</p>
+      <h2>Verantwortliche Stelle</h2>
+      <p>{school.name}, {school.street}, {school.zip} {school.city}</p>
+      <h2>Datensparsam by Design</h2>
+      <ul>
+        <li>Keine Cookies, kein Tracking, keine Analyse-Dienste.</li>
+        <li>Alle Schriftarten werden lokal ausgeliefert – keine Verbindung zu Google Fonts.</li>
+        <li>Die Karte auf der Kontaktseite wird erst nach Ihrer ausdrücklichen Zustimmung von OpenStreetMap geladen.</li>
+        <li>Das Kontaktformular öffnet lediglich Ihr eigenes E-Mail-Programm; es werden keine Daten an diese Website übermittelt.</li>
+        <li>Die gewählte Farbdarstellung (hell/dunkel) wird ausschließlich lokal in Ihrem Browser gespeichert.</li>
+      </ul>
+      <h2>Server-Logfiles</h2>
+      <p>Beim Aufruf der Website verarbeitet der Hosting-Anbieter technisch notwendige Daten (z. B. IP-Adresse, Zeitpunkt). Details ergänzt die Schule entsprechend dem gewählten Hosting.</p>
+      <h2>Ihre Rechte</h2>
+      <p>Sie haben das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung der Verarbeitung sowie ein Beschwerderecht beim Landesbeauftragten für Datenschutz und Informationsfreiheit Mecklenburg-Vorpommern.</p>
+    </div>
+  </section>
+</BaseLayout>

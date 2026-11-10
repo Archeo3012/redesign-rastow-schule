@@ -1,0 +1,67 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import EventList from '../components/EventList.astro';
+
+const today = new Date(new Date().toDateString());
+const all = (await getCollection('termine'))
+  .filter((e) => (e.data.end ?? e.data.date) >= today)
+  .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
+
+const monthFmt = new Intl.DateTimeFormat('de-DE', { month: 'long', year: 'numeric' });
+const groups = new Map<string, typeof all>();
+for (const e of all) {
+  const key = monthFmt.format(e.data.date);
+  groups.set(key, [...(groups.get(key) ?? []), e]);
+}
+const categories = ['Alle', ...new Set(all.map((e) => e.data.category))];
+---
+<BaseLayout title="Termine" description="Termine, Veranstaltungen und Ferien der Ernst-Alban-Schule Rastow.">
+  <PageHeader eyebrow="Termine" title="Was steht an?" lead="Veranstaltungen, Elternabende und Ferien auf einen Blick. Kurzfristige Änderungen finden Sie zusätzlich auf itslearning." motif="calendar" />
+
+  <section class="section" style="padding-top:clamp(32px,5vw,56px)">
+    <div class="container termine">
+      <div class="filters" role="group" aria-label="Termine filtern">
+        {categories.map((c, i) => <button type="button" class="filter" aria-pressed={i === 0 ? 'true' : 'false'} data-filter={c}>{c}</button>)}
+      </div>
+      {[...groups].map(([month, events]) => (
+        <section class="month" data-month>
+          <h2>{month}</h2>
+          {events.map((e) => <div data-cat={e.data.category}><EventList events={[e]} /></div>)}
+        </section>
+      ))}
+      <p class="hint">Alle Termine sind Beispieltermine. Ferientermine bitte stets mit dem offiziellen Ferienkalender des Landes Mecklenburg-Vorpommern abgleichen.</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  buttons.forEach((btn) => btn.addEventListener('click', () => {
+    const f = btn.dataset.filter;
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    document.querySelectorAll<HTMLElement>('[data-cat]').forEach((el) => {
+      el.hidden = f !== 'Alle' && el.dataset.cat !== f;
+    });
+    document.querySelectorAll<HTMLElement>('[data-month]').forEach((m) => {
+      m.hidden = !m.querySelector('[data-cat]:not([hidden])');
+    });
+  }));
+</script>
+
+<style>
+  .termine { max-width: 900px; }
+  .filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+  .filter {
+    font: inherit; font-weight: 700; font-size: 0.92rem; cursor: pointer; min-height: 40px;
+    padding: 0.4rem 1rem; border-radius: 999px; border: 1px solid var(--c-border);
+    background: var(--c-surface); color: var(--c-text);
+  }
+  .filter:hover { border-color: var(--c-primary); }
+  .filter[aria-pressed='true'] { background: var(--c-primary); color: var(--c-on-primary); border-color: var(--c-primary); }
+  .month { margin-bottom: 2.5rem; }
+  .month h2 { font-size: 1.5rem; margin-bottom: 1rem; }
+  .month > div + div { margin-top: 12px; }
+  .hint { color: var(--c-muted); font-size: 0.95rem; }
+</style>

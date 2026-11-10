@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { school } from '../lib/site';
+---
+<BaseLayout title="Impressum">
+  <section class="section">
+    <div class="container prose">
+      <p class="eyebrow">Rechtliches</p>
+      <h1>Impressum</h1>
+      <p><strong>Hinweis:</strong> Platzhalter – die vollständigen Angaben müssen von der Schule bzw. dem Schulträger ergänzt und rechtlich geprüft werden.</p>
+      <h2>Angaben gemäß § 5 DDG</h2>
+      <p>{school.name}<br />{school.street}<br />{school.zip} {school.city}</p>
+      <h2>Vertreten durch</h2>
+      <p>Schulleitung: N. N.</p>
+      <h2>Kontakt</h2>
+      <p>Telefon: {school.phone}<br />E-Mail: <a href={`mailto:${school.email}`}>{school.email}</a></p>
+      <h2>Schulträger</h2>
+      <p>{school.carrier}</p>
+      <h2>Verantwortlich für den Inhalt</h2>
+      <p>N. N. (Anschrift wie oben)</p>
+    </div>
+  </section>
+</BaseLayout>

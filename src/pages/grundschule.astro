@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Feature from '../components/Feature.astro';
+import Icon from '../components/Icon.astro';
+import { url } from '../lib/site';
+
+const day = [
+  { time: '7:00', label: 'Frühbetreuung & Ankommen' },
+  { time: '7:45', label: 'Unterrichtsbeginn im Klassenverband' },
+  { time: '9:20', label: 'Frühstückspause & Hofpause' },
+  { time: '11:30', label: 'Mittagessen in der Mensa' },
+  { time: '12:30', label: 'AGs, Hausaufgabenzeit & Hort' },
+];
+---
+<BaseLayout title="Grundschule" description="Die Grundschule der Ernst-Alban-Schule Rastow: Klassen 1–4, Betreuung, Einschulung.">
+  <PageHeader eyebrow="Klassen 1–4" title="Grundschule: Ankommen, entdecken, wachsen." lead="In unserer Grundschule lernen Kinder in einer vertrauten Umgebung. Wir nehmen uns Zeit für jedes Kind – und legen die Grundlagen für eine erfolgreiche Schulzeit." motif="sun">
+    <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.5rem">
+      <a class="btn" href="#einschulung">Zur Einschulung <Icon name="arrow" /></a>
+    </div>
+  </PageHeader>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><div><p class="eyebrow">Was uns ausmacht</p><h2>Gut aufgehoben vom ersten Tag an</h2></div></div>
+      <div class="grid grid--3">
+        <Feature icon="users" title="Kleine Lerngruppen">Überschaubare Klassen ermöglichen individuelles Lernen und eine enge Begleitung durch die Klassenleitung.</Feature>
+        <Feature icon="books" title="Lesen & Sprache" tone="accent">Lesezeiten, Lesepaten aus den höheren Klassen und eine eigene Schulbücherei wecken die Freude an Büchern.</Feature>
+        <Feature icon="leaf" title="Natur erleben">Unser Schulgarten und Unterrichtsgänge in die Umgebung machen Sachunterricht greifbar.</Feature>
+        <Feature icon="laptop" title="Digitale Grundbildung" tone="accent">Erste Schritte mit Tablets und Lernplattform – altersgerecht und begleitet.</Feature>
+        <Feature icon="ball" title="Bewegung">Bewegte Pausen, Schwimmunterricht und Sportfeste sorgen für Ausgleich.</Feature>
+        <Feature icon="heart" title="Sanfter Übergang" tone="accent">Der Wechsel in Klasse 5 findet im selben Haus statt – mit vertrauten Gesichtern.</Feature>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container split">
+      <div class="reveal">
+        <p class="eyebrow">Ein Schultag</p>
+        <h2>So sieht unser Tag aus</h2>
+        <p class="lead">Feste Abläufe geben Sicherheit. <em>(Beispielhafte Zeiten – werden von der Schule angepasst.)</em></p>
+      </div>
+      <ol class="day reveal">
+        {day.map((d) => <li><time>{d.time}</time><span>{d.label}</span></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="einschulung">
+    <div class="container split">
+      <div class="prose reveal">
+        <p class="eyebrow">Einschulung</p>
+        <h2 style="margin-top:0">Ihr Kind kommt in die Schule?</h2>
+        <p>Wir freuen uns auf Sie! Die Anmeldung für die Einschulung erfolgt im Frühjahr des Vorjahres im Sekretariat. Vorab laden wir zu einem Kennenlern-Nachmittag und zum Tag der offenen Tür ein.</p>
+        <ul class="checklist">
+          <li>Anmeldung im Sekretariat (Geburtsurkunde mitbringen)</li>
+          <li>Nachweis über Masernschutz</li>
+          <li>Schuleingangsuntersuchung durch das Gesundheitsamt</li>
+          <li>Schnuppertag für Vorschulkinder im Sommer</li>
+        </ul>
+      </div>
+      <div class="card reveal" style="background:var(--c-accent-soft);border-color:transparent">
+        <h3>Hort &amp; Betreuung</h3>
+        <p>In Kooperation mit dem Hort werden die Kinder vor und nach dem Unterricht betreut. Details zu Zeiten und Anmeldung erhalten Sie im Sekretariat.</p>
+        <a class="btn" href={url('kontakt/')}>Kontakt aufnehmen <Icon name="arrow" /></a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .day { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .day li {
+    display: grid; grid-template-columns: 80px 1fr; gap: 1rem; align-items: center;
+    background: var(--c-surface); border-radius: var(--radius-sm); padding: 14px 18px; border: 1px solid var(--c-border);
+  }
+  .day time { font-family: var(--font-display); font-size: 1.35rem; font-weight: 650; color: var(--c-primary); }
+</style>

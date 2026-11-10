@@ -1,0 +1,31 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Motif from './Motif.astro';
+import { formatDate, url } from '../lib/site';
+interface Props { post: CollectionEntry<'news'>; featured?: boolean }
+const { post, featured = false } = Astro.props;
+const { title, date, excerpt, category, motif } = post.data;
+---
+<article class:list={['card card--link news-card', { 'news-card--featured': featured }]}>
+  <Motif name={motif} />
+  <div class="news-card__body">
+    <p class="news-card__meta"><span class="tag">{category}</span> <time datetime={date.toISOString()}>{formatDate(date)}</time></p>
+    <h3><a href={url(`neuigkeiten/${post.id}/`)}>{title}</a></h3>
+    <p>{excerpt}</p>
+    <span class="news-card__more" aria-hidden="true">Weiterlesen →</span>
+  </div>
+</article>
+
+<style>
+  .news-card { padding: 12px; display: flex; flex-direction: column; }
+  .news-card__body { padding: 18px 12px 12px; display: flex; flex-direction: column; flex: 1; }
+  .news-card__meta { display: flex; gap: 0.75rem; align-items: center; font-size: 0.9rem; color: var(--c-muted); margin-bottom: 0.75rem; }
+  .news-card p:not(.news-card__meta) { color: var(--c-muted); }
+  .news-card__more { margin-top: auto; font-weight: 700; color: var(--c-primary); }
+  @media (min-width: 900px) {
+    .news-card--featured { grid-column: span 2; flex-direction: row; align-items: stretch; }
+    .news-card--featured :global(.motif) { width: 48%; aspect-ratio: auto; min-height: 280px; }
+    .news-card--featured .news-card__body { padding: 28px; justify-content: center; }
+    .news-card--featured h3 { font-size: 1.8rem; }
+  }
+</style>

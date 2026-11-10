@@ -1,0 +1,33 @@
+---
+import Motif from './Motif.astro';
+interface Props { eyebrow: string; title: string; lead?: string; motif?: 'books' | 'gear' | 'sun' | 'ball' | 'leaf' | 'star' | 'music' | 'paint' | 'compass' | 'users' | 'graduation' | 'calendar' | 'mail' | 'download' }
+const { eyebrow, title, lead, motif = 'gear' } = Astro.props;
+---
+<section class="page-header">
+  <div class="container page-header__inner">
+    <div>
+      <p class="eyebrow">{eyebrow}</p>
+      <h1>{title}</h1>
+      {lead && <p class="lead">{lead}</p>}
+      <slot />
+    </div>
+    <div class="page-header__art" aria-hidden="true">
+      <Motif name={motif} size="lg" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .page-header {
+    position: relative; overflow: hidden;
+    padding-block: clamp(48px, 8vw, 96px) clamp(40px, 6vw, 72px);
+    background:
+      radial-gradient(60% 80% at 100% 0%, var(--c-accent-soft), transparent 70%),
+      radial-gradient(50% 70% at 0% 100%, var(--c-primary-soft), transparent 70%);
+  }
+  .page-header__inner { display: grid; gap: 2rem; align-items: center; }
+  @media (min-width: 860px) { .page-header__inner { grid-template-columns: 1fr 260px; } }
+  .page-header h1 { max-width: 18ch; }
+  .page-header__art { justify-self: center; }
+  @media (max-width: 859px) { .page-header__art { display: none; } }
+</style>

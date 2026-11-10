@@ -1,0 +1,53 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Motif from '../../components/Motif.astro';
+import Icon from '../../components/Icon.astro';
+import NewsCard from '../../components/NewsCard.astro';
+import { formatDate, url } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('news');
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+const { post } = Astro.props;
+const { Content } = await render(post);
+const more = (await getCollection('news'))
+  .filter((p) => p.id !== post.id)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+---
+<BaseLayout title={post.data.title} description={post.data.excerpt}>
+  <article class="article">
+    <header class="container article__head">
+      <a class="article__back" href={url('neuigkeiten/')}>← Alle Neuigkeiten</a>
+      <p class="article__meta"><span class="tag">{post.data.category}</span> <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time></p>
+      <h1>{post.data.title}</h1>
+      <p class="lead">{post.data.excerpt}</p>
+    </header>
+    <div class="container article__media"><Motif name={post.data.motif} /></div>
+    <div class="container">
+      <div class="prose article__body"><Content /></div>
+    </div>
+  </article>
+
+  <section class="section section--tint">
+    <div class="container">
+      <div class="section-head">
+        <h2>Weitere Beiträge</h2>
+        <a class="btn btn--ghost" href={url('neuigkeiten/')}>Alle Beiträge <Icon name="arrow" /></a>
+      </div>
+      <div class="grid grid--3">{more.map((p) => <NewsCard post={p} />)}</div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .article__head { max-width: 860px; padding-top: clamp(32px, 6vw, 72px); }
+  .article__back { display: inline-block; margin-bottom: 1.5rem; font-weight: 700; text-decoration: none; }
+  .article__meta { display: flex; gap: 0.75rem; align-items: center; color: var(--c-muted); }
+  .article h1 { font-size: clamp(2rem, 4.5vw, 3.2rem); }
+  .article__media { max-width: 1000px; margin-block: 2rem; }
+  .article__media :global(.motif) { aspect-ratio: 21 / 9; border-radius: var(--radius-lg); }
+  .article__body { margin-inline: auto; max-width: 70ch; padding-bottom: var(--section); font-size: 1.12rem; }
+</style>

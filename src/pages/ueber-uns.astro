@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Icon from '../components/Icon.astro';
+import Motif from '../components/Motif.astro';
+
+const values = [
+  { icon: 'heart', title: 'Miteinander', text: 'Wir begegnen uns mit Respekt – Kinder, Jugendliche, Eltern und Team. Ältere übernehmen Verantwortung für Jüngere.' },
+  { icon: 'gear', title: 'Praxisnähe', text: 'Lernen mit Kopf, Herz und Hand: Werkstatt, Schulgarten, Projekte und Praxistage in Betrieben der Region.' },
+  { icon: 'star', title: 'Individuell fördern', text: 'Jedes Kind hat eigene Stärken. Kleine Lerngruppen und Förderangebote helfen, sie zu entdecken.' },
+  { icon: 'compass', title: 'Orientierung', text: 'Wir begleiten verlässlich vom ersten Schultag bis zum Abschluss und darüber hinaus in Ausbildung und Beruf.' },
+] as const;
+
+const team = [
+  { role: 'Schulleitung', name: 'N. N.' },
+  { role: 'Stellv. Schulleitung', name: 'N. N.' },
+  { role: 'Sekretariat', name: 'N. N.' },
+  { role: 'Schulsozialarbeit', name: 'N. N.' },
+];
+---
+<BaseLayout title="Über uns" description="Leitbild, Geschichte und Namensgeber der Ernst-Alban-Schule Rastow.">
+  <PageHeader eyebrow="Über uns" title="Eine Schule, in der man sich kennt." lead="Wir sind eine Regionale Schule mit Grundschule im ländlichen Rastow. Hier lernen Kinder und Jugendliche der Klassen 1 bis 10 gemeinsam – überschaubar, persönlich und mit kurzen Wegen." motif="users" />
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div><p class="eyebrow">Leitbild</p><h2>Wofür wir stehen</h2></div>
+      </div>
+      <div class="grid grid--4">
+        {values.map((v) => (
+          <div class="card reveal">
+            <span class="icon-badge"><Icon name={v.icon} /></span>
+            <h3 style="margin-top:1.2rem">{v.title}</h3>
+            <p style="color:var(--c-muted);margin:0">{v.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint" id="namensgeber">
+    <div class="container split">
+      <div class="prose reveal">
+        <p class="eyebrow">Namensgeber</p>
+        <h2 style="margin-top:0">Dr. Ernst Alban (1791–1856)</h2>
+        <p>Ernst Alban wurde 1791 in Neubrandenburg geboren. Er studierte Medizin und arbeitete als Augenarzt in Rostock – doch seine große Leidenschaft gehörte der Technik.</p>
+        <p>Er beschäftigte sich intensiv mit Hochdruck-Dampfmaschinen, schrieb Fachbücher darüber und gründete in Plau am See eine eigene Maschinenfabrik. Damit gehört er zu den bedeutendsten Ingenieuren Mecklenburgs im 19. Jahrhundert.</p>
+        <p>Für uns steht Ernst Alban für Neugier, Erfindergeist und den Mut, Neues zu wagen – Werte, die wir an unserer Schule jeden Tag leben möchten.</p>
+      </div>
+      <div class="reveal timeline-wrap">
+        <ol class="timeline">
+          <li><strong>1791</strong><span>Geburt in Neubrandenburg</span></li>
+          <li><strong>Studium</strong><span>Medizin, später Augenarzt in Rostock</span></li>
+          <li><strong>Erfinder</strong><span>Forschung an Hochdruck-Dampfmaschinen</span></li>
+          <li><strong>Plau am See</strong><span>Gründung einer Maschinenfabrik</span></li>
+          <li><strong>1856</strong><span>Tod in Plau am See</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div><p class="eyebrow">Ansprechpartner</p><h2>Unser Team</h2></div>
+        <p class="lead" style="max-width:46ch">Rund um die Schule kümmern sich viele Menschen um einen guten Schultag. <em>(Namen werden von der Schule ergänzt.)</em></p>
+      </div>
+      <div class="grid grid--4">
+        {team.map((t, i) => (
+          <div class="card team reveal">
+            <Motif name={(['users', 'star', 'mail', 'leaf'] as const)[i]} size="sm" />
+            <div>
+              <p class="team__role">{t.role}</p>
+              <p class="team__name">{t.name}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .timeline { list-style: none; margin: 0; padding: 0 0 0 1.5rem; border-left: 3px solid var(--c-primary-soft); display: grid; gap: 1.4rem; }
+  .timeline li { position: relative; display: grid; }
+  .timeline li::before {
+    content: ''; position: absolute; left: calc(-1.5rem - 9px); top: 0.35rem;
+    width: 15px; height: 15px; border-radius: 50%; background: var(--c-accent); border: 3px solid var(--c-surface-2);
+  }
+  .timeline strong { font-family: var(--font-display); font-size: 1.35rem; color: var(--c-primary); }
+  .timeline span { color: var(--c-muted); }
+  .timeline-wrap { background: var(--c-surface); border-radius: var(--radius-lg); padding: clamp(24px, 4vw, 44px); border: 1px solid var(--c-border); }
+  .timeline-wrap .timeline li::before { border-color: var(--c-surface); }
+  .team { display: flex; align-items: center; gap: 1rem; }
+  .team__role { margin: 0; font-size: 0.85rem; font-weight: 700; color: var(--c-primary); text-transform: uppercase; letter-spacing: 0.05em; }
+  .team__name { margin: 0; font-family: var(--font-display); font-size: 1.25rem; }
+</style>

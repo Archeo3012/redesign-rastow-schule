@@ -1,0 +1,103 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Icon from '../components/Icon.astro';
+import { school, url } from '../lib/site';
+
+const downloads = [
+  { title: 'Anmeldeformular Einschulung', type: 'PDF' },
+  { title: 'Anmeldung Klasse 5', type: 'PDF' },
+  { title: 'Antrag auf Beurlaubung', type: 'PDF' },
+  { title: 'Hausordnung', type: 'PDF' },
+  { title: 'Einverständnis Fotos & Website', type: 'PDF' },
+  { title: 'Mitgliedsantrag Förderverein', type: 'PDF' },
+];
+---
+<BaseLayout title="Service für Eltern" description="Krankmeldung, Downloads, Schulbus, Mensa und Förderverein der Ernst-Alban-Schule Rastow.">
+  <PageHeader eyebrow="Service" title="Alles Wichtige für Eltern &amp; Schüler." lead="Krankmeldung, Formulare, Schulbus und Mensa – hier finden Sie die häufigsten Anliegen an einem Ort." motif="download" />
+
+  <section class="section" style="padding-top:clamp(32px,5vw,56px)">
+    <div class="container grid grid--2">
+      <article class="card service reveal" id="krankmeldung">
+        <span class="icon-badge icon-badge--accent"><Icon name="bandage" /></span>
+        <h2>Krankmeldung</h2>
+        <p>Ist Ihr Kind krank, melden Sie es bitte <strong>am selben Tag bis 7:30 Uhr</strong> im Sekretariat ab – telefonisch oder per E-Mail. Eine schriftliche Entschuldigung folgt spätestens am dritten Tag.</p>
+        <div class="service__actions">
+          <a class="btn" href={`tel:${school.phoneHref}`}><Icon name="phone" /> {school.phone}</a>
+          <a class="btn btn--ghost" href={`mailto:${school.email}?subject=Krankmeldung`}><Icon name="mail" /> Per E-Mail</a>
+        </div>
+      </article>
+      <article class="card service reveal">
+        <span class="icon-badge"><Icon name="laptop" /></span>
+        <h2>itslearning</h2>
+        <p>Über die Lernplattform itslearning erhalten Schülerinnen und Schüler Aufgaben und Materialien, Eltern finden Elternbriefe und den Vertretungsplan.</p>
+        <div class="service__actions">
+          <a class="btn" href={school.itslearning} rel="noopener">Zu itslearning <Icon name="external" /></a>
+        </div>
+      </article>
+      <article class="card service reveal" id="schulbus">
+        <span class="icon-badge"><Icon name="bus" /></span>
+        <h2>Schulbus</h2>
+        <p>Die Schülerbeförderung wird vom Landkreis Ludwigslust-Parchim organisiert. Fahrpläne und Anträge auf Schülerbeförderung erhalten Sie beim Landkreis bzw. der Verkehrsgesellschaft.</p>
+      </article>
+      <article class="card service reveal" id="mensa">
+        <span class="icon-badge icon-badge--accent"><Icon name="food" /></span>
+        <h2>Mensa</h2>
+        <p>Täglich gibt es ein warmes Mittagessen. Den aktuellen Speiseplan und die Bestellung finden Sie beim Essensanbieter. <em>(Link folgt.)</em></p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container split">
+      <div class="reveal">
+        <p class="eyebrow">Downloads</p>
+        <h2>Formulare &amp; Dokumente</h2>
+        <p class="lead">Alle Formulare zum Herunterladen und Ausdrucken. <em>(Dateien werden von der Schule ergänzt.)</em></p>
+      </div>
+      <ul class="downloads reveal">
+        {downloads.map((d) => (
+          <li>
+            <span class="icon-badge"><Icon name="download" /></span>
+            <span class="downloads__title">{d.title}</span>
+            <span class="tag">{d.type}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="foerderverein">
+    <div class="container split">
+      <div class="card reveal" style="background:var(--c-primary);color:var(--c-on-primary);border:0">
+        <Icon name="heart" size={40} />
+        <h2 style="margin-top:1rem">Förderverein</h2>
+        <p>Der Förderverein unterstützt Klassenfahrten, Schulfeste, AGs und Anschaffungen, die über den Schulhaushalt hinausgehen. Jedes Mitglied hilft!</p>
+        <a class="btn btn--accent" href={url('kontakt/')}>Mitglied werden <Icon name="arrow" /></a>
+      </div>
+      <div class="prose reveal">
+        <h3 style="margin-top:0">Elternmitwirkung</h3>
+        <p>Eltern gestalten Schule mit – in der Schulkonferenz, im Schulelternrat und in den Klassenelternräten. Sprechen Sie uns gern an, wenn Sie sich einbringen möchten.</p>
+        <ul class="checklist">
+          <li>Schulkonferenz</li>
+          <li>Schulelternrat</li>
+          <li>Klassenelternversammlungen</li>
+          <li>Helfen bei Festen &amp; Projekten</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .service h2 { font-size: 1.6rem; margin: 1.2rem 0 0.5rem; }
+  .service p { color: var(--c-muted); }
+  .service__actions { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .downloads { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .downloads li {
+    display: flex; align-items: center; gap: 1rem; background: var(--c-surface);
+    border: 1px solid var(--c-border); border-radius: var(--radius-sm); padding: 10px 16px 10px 10px;
+  }
+  .downloads .icon-badge { width: 42px; height: 42px; border-radius: 12px; }
+  .downloads__title { flex: 1; font-weight: 700; }
+</style>
